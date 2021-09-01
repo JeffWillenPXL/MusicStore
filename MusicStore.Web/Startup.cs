@@ -49,8 +49,13 @@ namespace MusicStore.Web
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
+                    name: "Search",
+                    pattern: "SearchMusic/{genre = Rock}",
+                    defaults: new { controller = "Home", action = "Search" });
+                endpoints.MapControllerRoute(
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
+                
             });
         }
     }

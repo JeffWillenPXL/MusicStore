@@ -11,27 +11,54 @@ namespace MusicStore.Web.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
+        //private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger)
-        {
-            _logger = logger;
-        }
+        //public HomeController(ILogger<HomeController> logger)
+        //{
+        //    _logger = logger;
+        //}
+
+        //public IActionResult Index()
+        //{
+        //    return View();
+        //}
+
+        //public IActionResult Privacy()
+        //{
+        //    return View();
+        //}
+
+        //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+        //public IActionResult Error()
+        //{
+        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        //}
 
         public IActionResult Index()
         {
-            return View();
+            var result = new ContentResult
+            {
+                Content = $"{RouteData.Values["controller"]}:{RouteData.Values["action"]}"
+            };
+            return result;
         }
 
-        public IActionResult Privacy()
+        public IActionResult About()
         {
-            return View();
+            var result = new ContentResult
+            {
+                Content = $"{RouteData.Values["controller"]}:{RouteData.Values["action"]}"
+            };
+            return result;
         }
 
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
+        public IActionResult Details(int id)
         {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var result = new ContentResult
+            {
+                Content = $"{RouteData.Values["controller"]}:{RouteData.Values["action"]}:{id}"
+            };
+            return result;
         }
     }
 }
