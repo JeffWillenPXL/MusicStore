@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using MusicStore.Data;
 using MusicStore.Web.Services;
 
 
@@ -27,6 +28,7 @@ namespace MusicStore.Web
         {
             services.AddControllersWithViews();
             services.AddSingleton<IFileProvider, HostFileProvider>();
+            services.AddScoped<IGenreRepository, GenreDummyRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
