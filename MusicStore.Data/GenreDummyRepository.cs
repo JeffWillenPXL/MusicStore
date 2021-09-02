@@ -1,6 +1,7 @@
 ﻿using MusicStore.Data.DomainClasses;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace MusicStore.Data
@@ -32,6 +33,11 @@ namespace MusicStore.Data
         public IReadOnlyList<Genre> GetAll()
         {
             return _genres;
+        }
+
+        public Genre GetById(int id)
+        {
+            return _genres.FirstOrDefault(x => x.Id == id);
         }
     }
 }

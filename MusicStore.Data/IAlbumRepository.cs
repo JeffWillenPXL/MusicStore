@@ -5,9 +5,9 @@ using System.Text;
 
 namespace MusicStore.Data
 {
-    public interface IGenreRepository
+    public interface IAlbumRepository
     {
-        IReadOnlyList<Genre> GetAll();
-        Genre GetById(int id);
+        IReadOnlyList<Album> GetAlbumsByGenre(int genreId);
+        Album GetById(int id);
     }
 }
