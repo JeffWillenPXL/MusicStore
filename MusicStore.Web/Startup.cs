@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MusicStore.Data;
+using MusicStore.Web.Models;
 using MusicStore.Web.Services;
 
 
@@ -30,6 +31,7 @@ namespace MusicStore.Web
             services.AddSingleton<IFileProvider, HostFileProvider>();
             services.AddScoped<IGenreRepository, GenreDummyRepository>();
             services.AddScoped<IAlbumRepository, AlbumDummyRepository>();
+            services.AddScoped<IAlbumViewModelFactory, AlbumViewModelFactory>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

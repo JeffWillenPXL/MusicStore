@@ -3,6 +3,7 @@ using Moq;
 using MusicStore.Data;
 using MusicStore.Data.DomainClasses;
 using MusicStore.Web.Controllers;
+using MusicStore.Web.Models;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -16,17 +17,19 @@ namespace MusicStore.Tests
         private StoreController _sut;
         private Mock<IGenreRepository> _genreRepoMock;
         private Mock<IAlbumRepository> _albumRepoMock;
-
-
+        private Mock<IAlbumViewModelFactory> _albumViewModelMock;
         private readonly IReadOnlyList<Genre> _dummyGenres = new List<Genre>();
         private readonly IReadOnlyList<Album> _dummyAlbums = new List<Album>();
         private readonly Album _dummyAlbum = new Album();
+        private readonly Genre _dummyGenre = new Genre();
+        private readonly AlbumViewModel _dummyAlbumViewModel = new AlbumViewModel();
         
         [SetUp]
         public void Setup()
         {
             _genreRepoMock = new Mock<IGenreRepository>();
             _albumRepoMock = new Mock<IAlbumRepository>();
+            _albumViewModelMock = new Mock<IAlbumViewModelFactory>();
         }
 
         [Test]
@@ -34,7 +37,7 @@ namespace MusicStore.Tests
         {
             //Arrange
             _genreRepoMock.Setup(x => x.GetAll()).Returns(_dummyGenres);
-            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object);
+            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object, _albumViewModelMock.Object);
 
             //Act
             var result = _sut.Index() as ViewResult;
@@ -57,7 +60,7 @@ namespace MusicStore.Tests
             
             _genreRepoMock.Setup(x => x.GetById(It.IsAny<int>())).Returns(dummyGenre);
             _albumRepoMock.Setup(x => x.GetAlbumsByGenre(It.IsAny<int>())).Returns(_dummyAlbums);
-            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object);
+            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object, _albumViewModelMock.Object);
 
 
             //Act
@@ -76,7 +79,7 @@ namespace MusicStore.Tests
         {
             //Arrange
             _albumRepoMock.Setup(x => x.GetAlbumsByGenre(It.IsAny<int>()));
-            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object);
+            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object, _albumViewModelMock.Object);
 
             //Act
             var id = new Random().Next();
@@ -92,7 +95,9 @@ namespace MusicStore.Tests
         {
             //Arrange
             _albumRepoMock.Setup(x => x.GetById(It.IsAny<int>())).Returns(_dummyAlbum);
-            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object);
+            _genreRepoMock.Setup(x => x.GetById(It.IsAny<int>())).Returns(_dummyGenre);
+            _albumViewModelMock.Setup(x => x.Create(_dummyAlbum, _dummyGenre)).Returns(_dummyAlbumViewModel);
+            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object, _albumViewModelMock.Object);
 
             //Act
             var id = new Random().Next();
@@ -101,7 +106,13 @@ namespace MusicStore.Tests
             //Assert
             Assert.IsNotNull(result);
             Assert.IsNotNull(result.Model);
-            Assert.That(result.Model, Is.SameAs(_dummyAlbum));
+            Assert.That(result.Model, Is.SameAs(_dummyAlbumViewModel));
+            Assert.That(result.Model, Is.TypeOf(typeof (AlbumViewModel)));
+            _albumRepoMock.Verify(x => x.GetById(It.IsAny<int>()), Times.Once());
+            _genreRepoMock.Verify(x => x.GetById(It.IsAny<int>()), Times.Once());
+            _albumViewModelMock.Verify(x => x.Create(_dummyAlbum, _dummyGenre), Times.Once());
+            
+            
         }
 
         [Test]
@@ -109,7 +120,7 @@ namespace MusicStore.Tests
         {
             //Arrange
             _albumRepoMock.Setup(x => x.GetById(It.IsAny<int>()));
-            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object);
+            _sut = new StoreController(_genreRepoMock.Object, _albumRepoMock.Object, _albumViewModelMock.Object);
 
             //Act
             var id = new Random().Next();

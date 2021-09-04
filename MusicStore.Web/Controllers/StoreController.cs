@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using MusicStore.Data;
+using MusicStore.Web.Models;
 
 namespace MusicStore.Web.Controllers
 {
@@ -11,11 +12,13 @@ namespace MusicStore.Web.Controllers
     {
         private readonly IGenreRepository _genreRepository;
         private readonly IAlbumRepository _albumRepository;
+        private readonly IAlbumViewModelFactory _albumViewModelFactory;
 
-        public StoreController(IGenreRepository genreRepository, IAlbumRepository albumRepository)
+        public StoreController(IGenreRepository genreRepository, IAlbumRepository albumRepository, IAlbumViewModelFactory albumViewModelFactory)
         {
             _genreRepository = genreRepository;
             _albumRepository = albumRepository;
+            _albumViewModelFactory = albumViewModelFactory;
         }
         public IActionResult Index()
         {
@@ -36,12 +39,18 @@ namespace MusicStore.Web.Controllers
 
         public IActionResult Details(int id)
         {
-            var model = _albumRepository.GetById(id);
-            if (model == null)
+            
+            
+            var album = _albumRepository.GetById(id);
+            if (album == null)
             {
                 return NotFound();
             }
-            return View(model);
+            var genre = _genreRepository.GetById(album.GenreId);
+            var albumViewModel = _albumViewModelFactory.Create(album, genre);
+            
+
+            return View(albumViewModel);
         }
     }
 }
