@@ -25,6 +25,7 @@ namespace MusicStore.Tests
         }
 
         [Test]
+        [Ignore("Replaced by Index_ReturnsDefaultView")]
         public void Index_ReturnsContentContainingControllerNameAndActionName()
         {
             //Arrange
@@ -156,6 +157,18 @@ namespace MusicStore.Tests
             //Assert
             Assert.IsNotNull(result);
             Assert.That(result.Content, Is.EqualTo($"Home:Search:{genre}"));
+        }
+
+        [Test]
+        public void Index_ReturnsDefaultView()
+        {
+            //Act
+            var result = _sut.Index() as ViewResult;
+
+            //Assert
+            Assert.IsNotNull(result);
+            Assert.IsNull(result.ViewName);
+
         }
 
     }

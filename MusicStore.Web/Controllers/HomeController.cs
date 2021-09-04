@@ -44,11 +44,12 @@ namespace MusicStore.Web.Controllers
 
         public IActionResult Index()
         {
-            var result = new ContentResult
-            {
-                Content = $"{RouteData.Values["controller"]}:{RouteData.Values["action"]}"
-            };
-            return result;
+            //var result = new ContentResult
+            //{
+            //    Content = $"{RouteData.Values["controller"]}:{RouteData.Values["action"]}"
+            //};
+            //return result;
+            return View();
         }
 
         public IActionResult About()
